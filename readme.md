@@ -48,13 +48,7 @@
 | База данных | PostgreSQL |
 | Запуск | Docker Compose |
 
-## Запуск
 
-```bash
-git clone <ссылка на репозиторий>
-cd fast-typing
-docker compose up --build
-```
 
 После запуска приложение доступно в браузере по адресу `http://localhost:<порт>`.
 
