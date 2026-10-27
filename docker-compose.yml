@@ -1,4 +1,5 @@
 services:
+  # ---------- База данных ----------
   db:
     image: postgres:16-alpine
     container_name: ft-db
@@ -8,16 +9,20 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      # только с этого компьютера: базу не видно другим устройствам в сети
+      - "127.0.0.1:5432:5432"
     volumes:
-      - db-data:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d:ro
+      - db-data:/var/lib/postgresql/data         # NFR-04: данные переживают перезапуск
+      - ./db/init:/docker-entrypoint-initdb.d:ro # схема и тексты, выполняются один раз
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      # -h 127.0.0.1: во время первой инициализации база слушает только сокет,
+      # поэтому проверка по TCP не пройдёт, пока таблицы не созданы
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 3s
-      retries: 10
+      retries: 20
 
+  # ---------- Сервер (REST API) ----------
   backend:
     build: ./backend
     container_name: ft-backend
@@ -25,19 +30,25 @@ services:
     environment:
       PORT: 3000
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      ADMIN_LOGIN: ${ADMIN_LOGIN}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
     ports:
-      - "3000:3000"
+      # только с этого компьютера: из сети всё идёт через frontend (порт 5173)
+      - "127.0.0.1:3000:3000"
     volumes:
-      - ./backend/src:/app/src
+      - ./backend/src:/app/src   # изменения в коде подхватываются без пересборки
+      - ./backend/test:/app/test
     depends_on:
       db:
         condition: service_healthy
 
+  # ---------- Клиент (React + Vite) ----------
   frontend:
     build: ./frontend
     container_name: ft-frontend
     restart: unless-stopped
     ports:
+      # открыт для всей локальной сети: друзья заходят по http://<IP компьютера>:5173
       - "5173:5173"
     volumes:
       - ./frontend/src:/app/src

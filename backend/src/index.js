@@ -1,26 +1,37 @@
-import express from "express";
-import { pool } from "./db.js";
+import { createApp } from "./app.js";
+import { pool } from "./repositories/db.js";
+import * as authService from "./services/authService.js";
+import { runMigrations } from "./repositories/migrations.js";
+import { attachDuelSocket } from "./api/duelSocket.js";
 
-const app = express();
-app.use(express.json());
+const port = Number(process.env.PORT) || 3000;
 
-// Проверка, что сервер жив и видит базу данных.
-app.get("/api/health", async (req, res) => {
-  try {
-    const { rows } = await pool.query(
-      "SELECT count(*)::int AS tables FROM information_schema.tables WHERE table_schema = 'public'"
-    );
-    res.json({ status: "ok", db: "connected", tables: rows[0].tables });
-  } catch (err) {
-    res.status(500).json({ status: "error", db: "disconnected", message: err.message });
+// Ждём, пока база примет подключения (на первом запуске она создаёт таблицы).
+async function waitForDb(retries = 30) {
+  for (let i = 1; i <= retries; i++) {
+    try {
+      await pool.query("SELECT 1 FROM modes LIMIT 1");
+      return;
+    } catch (err) {
+      console.log(`База ещё не готова (${i}/${retries}): ${err.message}`);
+      await new Promise((r) => setTimeout(r, 2000));
+    }
   }
-});
+  throw new Error("Не удалось подключиться к базе данных");
+}
 
-// Список режимов из справочника — первый «настоящий» эндпоинт.
-app.get("/api/modes", async (req, res) => {
-  const { rows } = await pool.query("SELECT id, code, name FROM modes ORDER BY id");
-  res.json(rows);
-});
+async function main() {
+  await waitForDb();
+  if (await authService.ensureAdmin(process.env.ADMIN_LOGIN, process.env.ADMIN_PASSWORD)) {
+    console.log(`Создан администратор: ${process.env.ADMIN_LOGIN}`);
+  }
+  await runMigrations();
+  await authService.cleanupSessions();
+  const server = createApp().listen(port, () => console.log(`Backend запущен на порту ${port}`));
+  attachDuelSocket(server); // дуэли в реальном времени: /api/duels/ws
+}
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Backend запущен на порту ${port}`));
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
