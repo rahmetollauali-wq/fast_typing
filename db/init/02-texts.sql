@@ -1,4 +1,5 @@
--- Наполнение базы текстами: RU и EN, три уровня сложности.
+-- Словари для режимов «Слова» и «На время»: RU и EN, три уровня сложности.
+-- Осмысленные тексты и цитаты лежат в 03-more-texts.sql и 04-more-texts.sql.
 -- В текстах нет букв «ё», длинных тире и «ёлочек»: их неудобно набирать.
 
 INSERT INTO texts (language_id, difficulty_id, mode_id, body, author)
@@ -22,41 +23,7 @@ FROM (VALUES
  NULL),
 ('ru', 'hard', 'words',
  'достопримечательность ответственность интеллектуальный преимущественно взаимодействие высокопоставленный электричество оборудование конфиденциальный самостоятельность благодарность возможность обстоятельство предприниматель государственный исследование представитель производительность распространение удовлетворение характеристика усовершенствование непосредственный последовательность профессиональный технологический демократический информационный администрация экономический философия психология литература математика архитектура лаборатория библиотека энциклопедия дисциплина конференция компьютерный программирование алгоритм переменная функциональный безопасность сотрудничество впечатление воображение достижение исключительный',
- NULL),
-
--- ==================== КЛАССИЧЕСКИЙ РЕЖИМ (и «Без ошибок») ====================
-('en', 'easy', 'classic', 'the sun was warm and the sky was blue so we took a long walk by the river and talked about our plans for the week', NULL),
-('en', 'easy', 'classic', 'my cat likes to sleep on the bed all day and then run around the house at night when everyone else wants to rest', NULL),
-('en', 'easy', 'classic', 'we made a big pot of soup and shared it with our friends who came over to help us paint the old fence in the garden', NULL),
-('en', 'medium', 'classic', 'Typing fast is a skill that grows with regular practice. Focus on accuracy first, and the speed will follow naturally over time.', NULL),
-('en', 'medium', 'classic', 'The library was quiet in the morning, so she found a table by the window and spent two hours reading about the history of the city.', NULL),
-('en', 'medium', 'classic', 'Good habits are built in small steps. A few minutes of daily effort often matter more than one long session every other week.', NULL),
-('en', 'hard', 'classic', 'In 1969, roughly 600 million people watched the first Moon landing; it remains one of the most widely shared moments in human history.', NULL),
-('en', 'hard', 'classic', 'The committee reviewed 47 proposals, rejected 31 of them, and asked the remaining teams to submit revised budgets by March 15.', NULL),
-('en', 'hard', 'classic', 'Sophisticated algorithms can analyze enormous datasets, but their conclusions are only as reliable as the assumptions behind them.', NULL),
-('ru', 'easy', 'classic', 'утром мы пошли в парк и долго гуляли у реки а потом сели на лавку и смотрели как птицы летают над водой', NULL),
-('ru', 'easy', 'classic', 'мой брат любит читать книги про море и мечтает когда нибудь стать капитаном большого белого корабля', NULL),
-('ru', 'easy', 'classic', 'зимой в нашем городе много снега и дети каждый день лепят снеговиков и катаются с горы на санках', NULL),
-('ru', 'medium', 'classic', 'Быстрая печать - это навык, который развивается регулярной практикой. Сначала следите за точностью, а скорость придет сама.', NULL),
-('ru', 'medium', 'classic', 'В библиотеке было тихо, поэтому она выбрала стол у окна и два часа читала об истории старого города.', NULL),
-('ru', 'medium', 'classic', 'Хорошие привычки складываются из маленьких шагов. Несколько минут каждый день значат больше, чем одно долгое занятие раз в месяц.', NULL),
-('ru', 'hard', 'classic', 'В 1961 году Юрий Гагарин облетел Землю за 108 минут; этот полет стал одним из важнейших событий в истории человечества.', NULL),
-('ru', 'hard', 'classic', 'Комиссия рассмотрела 47 заявок, отклонила 31 из них и попросила остальные команды прислать исправленные сметы до 15 марта.', NULL),
-('ru', 'hard', 'classic', 'Современные алгоритмы обрабатывают огромные массивы данных, но их выводы надежны ровно настолько, насколько верны исходные предположения.', NULL),
-
--- ==================== ЦИТАТЫ ====================
-('en', 'easy',   'quotes', 'Well done is better than well said.', 'Benjamin Franklin'),
-('en', 'easy',   'quotes', 'The secret of getting ahead is getting started.', 'Mark Twain'),
-('en', 'medium', 'quotes', 'It does not matter how slowly you go as long as you do not stop.', 'Confucius'),
-('en', 'medium', 'quotes', 'An investment in knowledge pays the best interest.', 'Benjamin Franklin'),
-('en', 'hard',   'quotes', 'We are what we repeatedly do. Excellence, then, is not an act, but a habit.', 'Will Durant'),
-('en', 'hard',   'quotes', 'Do not wait to strike till the iron is hot, but make it hot by striking.', 'William Butler Yeats'),
-('ru', 'easy',   'quotes', 'Ученье свет, а неученье тьма.', 'Пословица'),
-('ru', 'easy',   'quotes', 'Москва не сразу строилась.', 'Пословица'),
-('ru', 'medium', 'quotes', 'Мы в ответе за тех, кого приручили.', 'Антуан де Сент-Экзюпери'),
-('ru', 'medium', 'quotes', 'Счастлив тот, кто счастлив у себя дома.', 'Лев Толстой'),
-('ru', 'hard',   'quotes', 'Все счастливые семьи похожи друг на друга, каждая несчастливая семья несчастлива по-своему.', 'Лев Толстой'),
-('ru', 'hard',   'quotes', 'В человеке должно быть все прекрасно: и лицо, и одежда, и душа, и мысли.', 'Антон Чехов')
+ NULL)
 ) AS v(lang, diff, mode, body, author)
 JOIN languages    l ON l.code = v.lang
 JOIN difficulties d ON d.code = v.diff

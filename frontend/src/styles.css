@@ -41,11 +41,13 @@ input, textarea, select { font: inherit; color: inherit; }
 /* ===== Каркас страницы ===== */
 .shell {
   min-height: 100%;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  width: 100%;
   max-width: var(--page);
   margin: 0 auto;
-  padding: 28px var(--gutter) 24px;
+  padding: clamp(14px, 3vh, 28px) clamp(16px, 2.5vw, 32px) clamp(12px, 2.4vh, 24px);
 }
 .shell.wide { --page: 1400px; }
 .main { flex: 1; display: flex; flex-direction: column; }
@@ -55,7 +57,7 @@ input, textarea, select { font: inherit; color: inherit; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+  height: clamp(50px, 7vh, 64px);
   transition: opacity 0.3s ease;
 }
 .logo { display: flex; align-items: center; gap: 14px; }
@@ -65,7 +67,7 @@ input, textarea, select { font: inherit; color: inherit; }
   display: grid; place-items: center;
 }
 .logo-word { font-family: var(--serif); font-size: 34px; letter-spacing: -0.5px; line-height: 1; }
-.nav { display: flex; align-items: center; gap: 26px; }
+.nav { display: flex; align-items: center; gap: clamp(14px, 2vw, 26px); }
 .nav-link {
   display: flex; align-items: center; gap: 8px;
   color: var(--text-3); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
@@ -85,7 +87,7 @@ input, textarea, select { font: inherit; color: inherit; }
 /* ===== Подвал ===== */
 .footer {
   display: flex; align-items: center; justify-content: space-between;
-  padding-top: 24px; color: var(--text-3); font-size: 11px;
+  padding-top: clamp(10px, 2.2vh, 24px); color: var(--text-3); font-size: 11px;
   transition: opacity 0.3s ease;
 }
 .hints { display: flex; gap: 22px; align-items: center; }
@@ -98,18 +100,19 @@ kbd {
 
 /* ===== Пилюли-переключатели ===== */
 .pill-group {
-  display: inline-flex; align-items: center; gap: 2px;
+  display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 2px;
+  max-width: 100%;
   border: 1px solid var(--line-strong); border-radius: var(--radius);
-  padding: 5px;
+  padding: clamp(3px, 0.5vh, 5px);
 }
 .pill {
-  padding: 8px 15px; border-radius: var(--radius);
-  color: var(--text-2); font-size: 13px; white-space: nowrap;
+  padding: clamp(5px, 0.8vh, 8px) clamp(10px, 1.1vw, 15px); border-radius: var(--radius);
+  color: var(--text-2); font-size: clamp(12px, 1.6vh, 13px); white-space: nowrap;
   transition: color 0.15s, background 0.15s;
 }
 .pill:hover { color: var(--text); }
 .pill.on { background: var(--cream); color: var(--cream-ink); }
-.pill-sep { width: 1px; height: 20px; background: var(--line-strong); margin: 0 8px; }
+.pill-sep { width: 1px; height: 20px; background: var(--line-strong); margin: 0 clamp(4px, 0.7vw, 8px); }
 .pill-icon { color: var(--text-3); display: grid; place-items: center; padding: 0 6px; }
 
 /* ===== Кнопки ===== */
@@ -134,7 +137,7 @@ kbd {
   font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-2);
 }
 .eyebrow::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
-.headline { font-family: var(--mono); font-weight: 400; font-size: 40px; letter-spacing: -0.02em; margin: 14px 0 0; }
+.headline { font-family: var(--mono); font-weight: 400; font-size: clamp(28px, 4vh, 40px); letter-spacing: -0.02em; margin: clamp(8px, 1.4vh, 14px) 0 0; }
 .label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); }
 .muted { color: var(--text-3); }
 .serif-num { font-family: var(--serif); font-weight: 400; line-height: 0.9; letter-spacing: -0.02em; }
@@ -149,20 +152,20 @@ kbd {
 .center { display: flex; flex-direction: column; align-items: center; }
 
 /* ===== Экран теста (SCR-01) ===== */
-.settings { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 18px; transition: opacity 0.3s; }
-.test-stats { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 44px; min-height: 76px; }
-.timer { font-family: var(--serif); font-size: 72px; line-height: 0.85; color: var(--accent); }
+.settings { display: flex; flex-direction: column; align-items: center; gap: clamp(6px, 1vh, 10px); margin-top: clamp(10px, 2vh, 18px); transition: opacity 0.3s; }
+.test-stats { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-top: clamp(16px, 4vh, 44px); min-height: clamp(62px, 9vh, 76px); }
+.timer { font-family: var(--serif); font-size: clamp(48px, 6.7vh, 72px); line-height: 0.85; color: var(--accent); }
 .timer small { font-family: var(--mono); font-size: 11px; color: var(--text-3); letter-spacing: 0.2em; margin-left: 8px; }
-.live { display: flex; gap: 34px; align-items: flex-end; }
+.live { display: flex; gap: clamp(18px, 3vw, 34px); align-items: flex-end; }
 .live-item { display: flex; align-items: baseline; gap: 8px; }
-.live-item .num { font-family: var(--serif); font-size: 46px; line-height: 0.85; }
-.live-item .num.small { font-size: 30px; color: var(--text-2); }
+.live-item .num { font-family: var(--serif); font-size: clamp(30px, 5vh, 46px); line-height: 0.85; }
+.live-item .num.small { font-size: clamp(22px, 3.3vh, 30px); color: var(--text-2); }
 .live-item .unit { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); }
 .live-item .unit.quiet { color: var(--text-3); }
 
-.words-window { position: relative; overflow: hidden; margin-top: 36px; outline: none; }
+.words-window { position: relative; overflow: hidden; margin-top: clamp(16px, 3.3vh, 36px); outline: none; }
 .words {
-  font-family: var(--mono); font-size: 30px; line-height: 75px;
+  font-family: var(--mono); font-size: clamp(20px, 2.8vh, 30px); line-height: clamp(50px, 7vh, 75px);
   transition: transform 0.18s ease;
   word-break: keep-all;
 }
@@ -184,15 +187,15 @@ kbd {
 .author { margin-top: 8px; color: var(--text-3); font-size: 13px; }
 .author::before { content: "— "; }
 
-.test-actions { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: auto; padding-top: 36px; }
+.test-actions { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: auto; padding-top: clamp(12px, 3vh, 36px); }
 .round-btn {
-  width: 56px; height: 56px; border-radius: 50%;
+  width: clamp(44px, 6vh, 56px); height: clamp(44px, 6vh, 56px); border-radius: 50%;
   background: var(--surface-2); color: var(--text-2);
   display: grid; place-items: center; transition: color 0.15s, background 0.15s;
 }
 .round-btn:hover { color: var(--text); background: #25252a; }
 .round-label { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-3); }
-.status-line { text-align: center; color: var(--text-3); margin-top: 40px; font-size: 13px; }
+.status-line { text-align: center; color: var(--text-3); margin-top: clamp(14px, 3.5vh, 40px); font-size: 13px; }
 
 .custom-box { margin-top: 36px; display: flex; flex-direction: column; gap: 12px; }
 .custom-box textarea {
@@ -204,22 +207,22 @@ kbd {
 .custom-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
 
 /* ===== Результат (SCR-02) ===== */
-.result-head { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 52px; gap: 24px; }
+.result-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; margin-top: clamp(24px, 5vh, 52px); gap: clamp(16px, 2vw, 24px); }
 .result-meta { text-align: right; font-size: 13px; line-height: 1.9; }
 .result-meta .muted { font-size: 11px; }
-.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 40px; }
-.stat .serif-num { font-size: 92px; margin: 18px 0 22px; }
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(14px, 2vw, 24px); margin-top: clamp(20px, 3.5vh, 40px); }
+.stat .serif-num { font-size: clamp(56px, 8.5vh, 92px); margin: clamp(10px, 1.8vh, 18px) 0 clamp(12px, 2vh, 22px); }
 .stat .sub { font-size: 12px; color: var(--text-3); }
-.split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 36px; }
-.note-head { font-size: 26px; line-height: 1.25; margin: 18px 0 16px; white-space: pre-line; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 3vw, 48px); margin-top: clamp(20px, 3.5vh, 36px); }
+.note-head { font-size: clamp(20px, 2.6vh, 26px); line-height: 1.25; margin: clamp(10px, 1.8vh, 18px) 0 clamp(10px, 1.6vh, 16px); white-space: pre-line; }
 .note-text { color: var(--text-2); font-size: 12px; line-height: 1.7; }
 .note-words { display: flex; gap: 28px; margin-top: 14px; font-size: 16px; flex-wrap: wrap; }
-.your-words { border-top: 1px solid var(--line); margin-top: 26px; padding-top: 24px; }
-.your-words .row-head { display: flex; justify-content: space-between; }
-.typed-words { font-size: 19px; line-height: 1.8; margin-top: 16px; }
+.your-words { border-top: 1px solid var(--line); margin-top: clamp(18px, 2.5vh, 26px); padding-top: clamp(16px, 2.2vh, 24px); }
+.your-words .row-head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.typed-words { font-size: 19px; line-height: 1.8; margin-top: clamp(10px, 1.6vh, 16px); }
 .typed-words .err, .note-words .err { color: var(--accent); }
 .typed-words .dim { color: var(--text-dim); }
-.result-actions { display: flex; justify-content: center; gap: 14px; margin-top: 36px; }
+.result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: clamp(20px, 3.2vh, 36px); }
 .caption { text-align: center; color: var(--text-3); font-size: 11px; margin-top: 16px; }
 
 /* ===== Графики ===== */
@@ -268,8 +271,8 @@ kbd {
 .empty { text-align: center; color: var(--text-3); padding: 48px 0; }
 
 /* ===== Профиль ===== */
-.profile-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 40px; }
-.profile-stats .serif-num { font-size: 64px; margin: 14px 0 10px; }
+.profile-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(14px, 2vw, 24px); margin-top: clamp(20px, 4vh, 40px); }
+.profile-stats .serif-num { font-size: clamp(40px, 6vh, 64px); margin: clamp(8px, 1.5vh, 14px) 0 clamp(6px, 1vh, 10px); }
 .records { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
 .record-card {
   border: 1px solid var(--line-strong); border-radius: 14px; padding: 16px 18px;
@@ -278,11 +281,11 @@ kbd {
 .record-card .serif-num { font-size: 38px; color: var(--accent); }
 .record-card .title { font-size: 13px; }
 .record-card .sub { font-size: 11px; color: var(--text-3); margin-top: 4px; }
-.section { margin-top: 44px; }
+.section { margin-top: clamp(24px, 4vh, 44px); }
 .section-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
 
 /* ===== Формы (вход, админ) ===== */
-.auth { max-width: 420px; margin: 70px auto 0; width: 100%; }
+.auth { max-width: 420px; margin: clamp(30px, 7vh, 70px) auto 0; width: 100%; }
 .form { display: flex; flex-direction: column; gap: 16px; margin-top: 30px; }
 .field { display: flex; flex-direction: column; gap: 8px; }
 .input {
@@ -311,4 +314,43 @@ textarea.input { height: auto; min-height: 120px; padding: 14px 16px; line-heigh
   .admin-form { grid-template-columns: 1fr 1fr; }
   .nav { gap: 16px; }
   .table .hide-sm { display: none; }
+}
+
+/* Ноутбучные высоты: экран результата не должен требовать прокрутки
+   только ради нижних отступов. */
+@media (max-height: 800px) {
+  .shell { padding-bottom: 0; }
+  .result-head { margin-top: 24px; }
+  .stat-grid { margin-top: 18px; }
+  .stat .serif-num { font-size: 56px; margin: 10px 0 12px; }
+  .split { margin-top: 18px; }
+  .your-words { margin-top: 14px; padding-top: 12px; }
+  .result-actions { margin-top: 16px; }
+  .result-actions .btn { height: 42px; }
+  .caption { margin-top: 8px; }
+  .footer { padding-top: 10px; }
+}
+
+/* Совсем низкий viewport: ужимаем вертикальные отступы, чтобы экран теста
+   целиком помещался при 100% масштабе и не требовал уменьшения браузера. */
+@media (max-height: 620px) {
+  .shell { padding-top: 10px; padding-bottom: 8px; }
+  .header { height: 44px; }
+  .settings { margin-top: 6px; gap: 4px; }
+  .pill-group { padding: 2px; }
+  .pill { padding: 4px 9px; font-size: 11px; }
+  .test-stats { margin-top: 10px; min-height: 54px; gap: 8px; }
+  .timer { font-size: 40px; }
+  .live { gap: 16px; }
+  .live-item .num { font-size: 26px; }
+  .live-item .num.small { font-size: 20px; }
+  .live-item .unit { font-size: 9px; }
+  .words-window { margin-top: 10px; }
+  .words { font-size: 18px; line-height: 44px; }
+  .status-line { margin-top: 8px; font-size: 11px; }
+  .test-actions { padding-top: 8px; gap: 6px; }
+  .round-btn { width: 38px; height: 38px; }
+  .round-label { font-size: 9px; }
+  .footer { padding-top: 6px; font-size: 10px; }
+  .hints { gap: 14px; }
 }

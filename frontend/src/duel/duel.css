@@ -1,8 +1,8 @@
 /* ===== Дуэли (в стиле остальных экранов) ===== */
-.duel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
+.duel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: clamp(20px, 4vh, 40px); }
 .duel-card {
-  border: 1px solid var(--line-strong); border-radius: 18px; padding: 26px 28px;
-  display: flex; flex-direction: column; gap: 18px;
+  border: 1px solid var(--line-strong); border-radius: 18px; padding: clamp(18px, 2.5vh, 26px) clamp(20px, 2vw, 28px);
+  display: flex; flex-direction: column; gap: clamp(12px, 1.8vh, 18px);
 }
 .duel-card h2 { font-weight: 400; font-size: 22px; margin: 0; }
 .duel-card .hint-text { font-size: 12px; line-height: 1.6; }
@@ -15,17 +15,17 @@
 .code-input:focus { border-color: var(--text-3); }
 .code-input::placeholder { color: var(--text-dim); letter-spacing: 0.3em; }
 
-.duel-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 44px; }
-.duel-stats .serif-num { font-size: 56px; margin-top: 12px; }
+.duel-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(14px, 2vw, 24px); margin-top: clamp(24px, 4vh, 44px); }
+.duel-stats .serif-num { font-size: clamp(36px, 5.5vh, 56px); margin-top: 12px; }
 .outcome { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
 .outcome.win { color: var(--accent); }
 .outcome.loss { color: var(--text-3); }
 .outcome.draw { color: var(--text-2); }
 
 /* Ожидание соперника */
-.room-wait { display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 56px; gap: 14px; }
+.room-wait { display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: clamp(24px, 5vh, 56px); gap: clamp(10px, 1.5vh, 14px); }
 .room-code {
-  font-family: var(--mono); font-size: 76px; letter-spacing: 0.22em; padding-left: 0.22em;
+  font-family: var(--mono); font-size: clamp(44px, 7vh, 76px); letter-spacing: 0.22em; padding-left: 0.22em;
   color: var(--text); margin: 6px 0 4px; line-height: 1;
 }
 .room-actions { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; justify-content: center; }
@@ -42,11 +42,11 @@
 @keyframes pulse { 50% { opacity: 0.3; } }
 
 /* Отсчёт */
-.countdown { display: flex; flex-direction: column; align-items: center; margin-top: 70px; gap: 10px; }
-.countdown .serif-num { font-size: 220px; color: var(--accent); }
+.countdown { display: flex; flex-direction: column; align-items: center; margin-top: clamp(30px, 6vh, 70px); gap: 10px; }
+.countdown .serif-num { font-size: clamp(120px, 20vh, 220px); color: var(--accent); }
 
 /* Полосы прогресса во время гонки */
-.lanes { display: flex; flex-direction: column; gap: 14px; margin-top: 34px; }
+.lanes { display: flex; flex-direction: column; gap: clamp(10px, 1.5vh, 14px); margin-top: clamp(18px, 3vh, 34px); }
 .lane { display: grid; grid-template-columns: 170px 1fr 92px; align-items: center; gap: 18px; font-size: 13px; }
 .lane-name { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
 .lane-name span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -54,15 +54,15 @@
 .lane-track { height: 6px; border-radius: 6px; background: var(--surface-2); overflow: hidden; }
 .lane-fill { height: 100%; border-radius: 6px; background: var(--text-2); transition: width 0.2s ease; }
 .lane.me .lane-fill { background: var(--accent); }
-.lane-wpm { text-align: right; font-family: var(--serif); font-size: 28px; line-height: 1; }
+.lane-wpm { text-align: right; font-family: var(--serif); font-size: clamp(20px, 3vh, 28px); line-height: 1; }
 .lane-wpm small { font-family: var(--mono); font-size: 10px; color: var(--text-3); margin-left: 6px; letter-spacing: 0.15em; }
 
 /* Итоги */
-.vs-table { width: 100%; border-collapse: collapse; margin-top: 36px; }
+.vs-table { width: 100%; border-collapse: collapse; margin-top: clamp(20px, 3.5vh, 36px); }
 .vs-table th { font-weight: 400; text-align: right; padding: 0 16px 14px; border-bottom: 1px solid var(--line); font-size: 13px; }
 .vs-table th:first-child { text-align: left; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-2); }
 .vs-table th .tag { display: block; font-size: 10px; color: var(--text-3); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
-.vs-table td { padding: 0 16px; height: 64px; border-bottom: 1px solid var(--line); text-align: right; font-family: var(--serif); font-size: 34px; color: var(--text-2); }
+.vs-table td { padding: 0 16px; height: clamp(48px, 6vh, 64px); border-bottom: 1px solid var(--line); text-align: right; font-family: var(--serif); font-size: clamp(24px, 3.5vh, 34px); color: var(--text-2); }
 .vs-table td:first-child { text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); }
 .vs-table td.best { color: var(--accent); }
 .vs-table td.na { font-family: var(--mono); font-size: 12px; color: var(--text-3); }
