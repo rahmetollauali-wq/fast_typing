@@ -98,6 +98,7 @@ export default function PracticePage() {
         difficulty: current.difficulty,
         option: current.option,
         textId: current.textId,
+        textIds: current.textIds,
         target: current.text,
         keystrokes: run.current.keystrokes,
       });

@@ -8,10 +8,10 @@ export const CUSTOM_MIN = 20;
 export const CUSTOM_MAX = 2000;
 
 // Откуда берётся текст для каждого режима.
-//   classic, noerror → готовые тексты режима classic
-//   quotes           → цитаты
-//   words, time      → случайные слова из словаря (тексты режима words)
-const SOURCE = { classic: "classic", noerror: "classic", quotes: "quotes", words: "words", time: "words" };
+//   classic, noerror, time → готовые тексты режима classic
+//   quotes                 → цитаты
+//   words                  → случайные слова из словаря
+const SOURCE = { classic: "classic", noerror: "classic", quotes: "quotes", words: "words", time: "classic" };
 
 const PUNCT = [",", ".", ";", "?", "!", ":"];
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -71,13 +71,32 @@ export async function getTextForTest({ mode, language, difficulty, option, exclu
   checkOption(mode, option);
   const ids = await sourceIds(mode, r.language.id, r.difficulty.id);
 
-  if (mode === "words" || mode === "time") {
+  if (mode === "words") {
     const dict = await texts.findDictionary(ids);
     if (!dict.length) throw notFound("Нет словаря для этого языка и сложности");
-    // для режима «На время» слов с запасом: ~5 слов на секунду хватает даже на 250 WPM
-    const count = mode === "words" ? option : Math.max(60, option * 5);
-    const words = sampleWords(dict, count, difficulty === "hard");
+    const words = sampleWords(dict, option, difficulty === "hard");
     return { mode, language, difficulty, option, textId: null, author: null, text: words.join(" ") };
+  }
+
+  if (mode === "time") {
+    const rows = await texts.findAllActive(ids);
+    if (!rows.length) throw notFound("Нет текстов для этого языка и сложности");
+
+    // Собираем связный текст с запасом даже для 250 WPM: ~30 символов в секунду.
+    const required = Math.max(800, option * 30);
+    const textIds = [];
+    let body = "";
+    let i = 0;
+    while (body.length < required && i < 300) {
+      const part = normalize(rows[i % rows.length].body);
+      if (part) {
+        body = body ? `${body} ${part}` : part;
+        textIds.push(rows[i % rows.length].id);
+      }
+      i++;
+    }
+    if (!body) throw notFound("Нет текстов для этого языка и сложности");
+    return { mode, language, difficulty, option, textId: null, textIds, author: null, text: body };
   }
 
   const row = await texts.findRandom({ ...ids, excludeId });
@@ -90,7 +109,7 @@ export async function getTextForTest({ mode, language, difficulty, option, exclu
 
 // Проверка, что текст, который печатал клиент, действительно выдан сервером.
 // Возвращает textId для сохранения попытки.
-export async function verifyTarget({ mode, languageId, difficultyId, option, textId, target }) {
+export async function verifyTarget({ mode, languageId, difficultyId, option, textId, textIds, target }) {
   if (mode === "custom") {
     if (target.length < CUSTOM_MIN) throw badRequest("CUSTOM_TOO_SHORT", `Минимум ${CUSTOM_MIN} символов`);
     if (target.length > CUSTOM_MAX) throw badRequest("CUSTOM_TOO_LONG", `Максимум ${CUSTOM_MAX} символов`);
@@ -99,10 +118,37 @@ export async function verifyTarget({ mode, languageId, difficultyId, option, tex
 
   const ids = await sourceIds(mode, languageId, difficultyId);
 
-  if (mode === "words" || mode === "time") {
+  if (mode === "time") {
+    if (!Array.isArray(textIds) || textIds.length === 0 || textIds.length > 120) {
+      throw badRequest("TEXT_MISMATCH", "Текст не совпадает с выданным");
+    }
+    const numericIds = textIds.map(Number);
+    if (numericIds.some((id) => !Number.isInteger(id))) {
+      throw badRequest("TEXT_MISMATCH", "Текст не совпадает с выданным");
+    }
+    if (target.length < option * 15) {
+      throw badRequest("TEXT_MISMATCH", "Слишком короткий текст для режима «На время»");
+    }
+    const rows = await texts.findByIds([...new Set(numericIds)]);
+    const byId = new Map(rows.map((row) => [row.id, row]));
+    const parts = [];
+    for (const id of numericIds) {
+      const row = byId.get(id);
+      if (!row || row.mode_id !== ids.modeId || row.language_id !== languageId || row.difficulty_id !== difficultyId) {
+        throw badRequest("TEXT_MISMATCH", "Текст не найден для этого режима");
+      }
+      parts.push(normalize(row.body));
+    }
+    if (parts.join(" ") !== target) {
+      throw badRequest("TEXT_MISMATCH", "Текст не совпадает с выданным");
+    }
+    return null;
+  }
+
+  if (mode === "words") {
     const dict = new Set(await texts.findDictionary(ids));
     const words = target.split(" ");
-    if (mode === "words" && words.length !== option) {
+    if (words.length !== option) {
       throw badRequest("TEXT_MISMATCH", "Количество слов не совпадает с режимом");
     }
     for (const w of words) {

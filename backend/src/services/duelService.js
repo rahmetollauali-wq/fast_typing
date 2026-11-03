@@ -266,10 +266,11 @@ export async function finish(code, user, keystrokes) {
   player.finishedAt = Date.now();
 
   try {
-    const { textId, text } = room.text;
+    const { textId, textIds, text } = room.text;
     player.result = await attemptService.submit(user, {
       ...room.settings,
       textId,
+      textIds,
       target: text,
       keystrokes,
     });

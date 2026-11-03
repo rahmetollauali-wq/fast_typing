@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { storage } from "../lib/storage.js";
 
 // Настройки теста: режим, длительность/число слов, язык текста, сложность.
@@ -9,12 +9,26 @@ export const DIFFICULTIES = ["easy", "medium", "hard"];
 export const CUSTOM_MIN = 20;
 export const CUSTOM_MAX = 2000;
 
-const DEFAULTS = { mode: "time", timeOption: 30, wordsOption: 25, language: "en", difficulty: "medium" };
+const THEMES = ["dark", "newyear"];
+const normalizeTheme = (theme) => (THEMES.includes(theme) ? theme : "dark");
+const DEFAULTS = { mode: "time", timeOption: 30, wordsOption: 25, language: "en", difficulty: "medium", theme: "dark" };
 
 const SettingsContext = createContext(null);
 
 export function SettingsProvider({ children }) {
-  const [settings, setSettings] = useState(() => ({ ...DEFAULTS, ...storage.getJSON("settings", {}) }));
+  const [settings, setSettings] = useState(() => {
+    const saved = storage.getJSON("settings", {});
+    const safe = saved && typeof saved === "object" && !Array.isArray(saved) ? saved : {};
+    return { ...DEFAULTS, ...safe, theme: normalizeTheme(safe.theme) };
+  });
+
+  // Тема применяется до отрисовки, чтобы не было вспышки старой палитры.
+  useLayoutEffect(() => {
+    const theme = normalizeTheme(settings.theme);
+    document.documentElement.dataset.theme = theme;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.content = theme === "newyear" ? "#071a16" : "#111113";
+  }, [settings.theme]);
 
   useEffect(() => storage.setJSON("settings", settings), [settings]);
 

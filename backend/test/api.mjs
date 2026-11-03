@@ -92,7 +92,7 @@ const getText = async (mode, extra = {}) =>
   (await call("GET", `/texts/random?${new URLSearchParams({ mode, language: "en", difficulty: "easy", ...extra })}`)).data;
 
 const submit = (text, ks, extra = {}, t = token) =>
-  call("POST", "/attempts", { mode: text.mode, language: "en", difficulty: "easy", option: text.option, textId: text.textId, target: text.text, keystrokes: ks, ...extra }, t);
+  call("POST", "/attempts", { mode: text.mode, language: "en", difficulty: "easy", option: text.option, textId: text.textId, textIds: text.textIds, target: text.text, keystrokes: ks, ...extra }, t);
 
 await check("TC-04 10 символов, 2 с ошибкой → точность 80%", async () => {
   const text = { mode: "custom", text: "abcdefghij abcdefghij" };

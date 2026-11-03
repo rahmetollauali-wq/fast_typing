@@ -22,6 +22,17 @@ export const User = ({ size = 18 }) => (
     <path d="M5.5 19.5a6.5 6.5 0 0 1 13 0" />
   </svg>
 );
+export const Moon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...base}>
+    <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 7 7 0 1 0 20.5 14.5z" />
+  </svg>
+);
+export const Snowflake = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...base}>
+    <path d="M12 2v20M3.5 7l17 10M20.5 7l-17 10" />
+    <path d="M8.5 4.5l3.5 2 3.5-2M8.5 19.5l3.5-2 3.5 2M4.5 10.5l3.5-1 1-3.5M19.5 13.5l-3.5 1-1 3.5" />
+  </svg>
+);
 export const Clock = ({ size = 15 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" {...base}>
     <circle cx="12" cy="12" r="8" />

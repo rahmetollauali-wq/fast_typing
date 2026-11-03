@@ -8,6 +8,9 @@ export const STRINGS = {
     "nav.profile": "Profile",
     "nav.signin": "Sign in",
     "nav.admin": "Texts",
+    "theme.label": "Theme",
+    "theme.dark": "Dark",
+    "theme.newyear": "New Year",
 
     "mode.classic": "classic",
     "mode.time": "time",
@@ -180,6 +183,9 @@ export const STRINGS = {
     "nav.profile": "Профиль",
     "nav.signin": "Войти",
     "nav.admin": "Тексты",
+    "theme.label": "Тема",
+    "theme.dark": "Темная",
+    "theme.newyear": "Новый год",
 
     "mode.classic": "классика",
     "mode.time": "на время",

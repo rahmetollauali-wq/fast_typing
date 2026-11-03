@@ -40,6 +40,7 @@ export async function submit(user, body) {
     difficultyId: refs.difficulty.id,
     option,
     textId: body.textId,
+    textIds: body.textIds,
     target,
   });
 

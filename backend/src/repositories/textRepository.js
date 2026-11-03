@@ -19,7 +19,24 @@ export async function findById(id, db = pool) {
   return rows[0] || null;
 }
 
-// Все слова словарей для языка и сложности (режимы «Слова» и «На время»).
+export async function findByIds(ids, db = pool) {
+  if (!ids.length) return [];
+  const { rows } = await db.query("SELECT * FROM texts WHERE id = ANY($1::int[])", [ids]);
+  return rows;
+}
+
+// Все активные классические тексты для режима «На время».
+export async function findAllActive({ modeId, languageId, difficultyId }, db = pool) {
+  const { rows } = await db.query(
+    `SELECT id, body, author FROM texts
+     WHERE mode_id = $1 AND language_id = $2 AND difficulty_id = $3 AND is_active
+     ORDER BY random()`,
+    [modeId, languageId, difficultyId]
+  );
+  return rows;
+}
+
+// Все слова словаря для режима «Слова».
 export async function findDictionary({ modeId, languageId, difficultyId }, db = pool) {
   const { rows } = await db.query(
     "SELECT body FROM texts WHERE mode_id = $1 AND language_id = $2 AND difficulty_id = $3 AND is_active",
